@@ -13,7 +13,6 @@ import java.sql.Blob;
 @Setter
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "image")
 public class Image {
 
@@ -31,4 +30,7 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public Image() {
+    }
 }

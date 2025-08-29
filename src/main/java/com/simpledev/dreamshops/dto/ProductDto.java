@@ -1,12 +1,13 @@
-package com.simpledev.dreamshops.request;
+package com.simpledev.dreamshops.dto;
 
-import com.simpledev.dreamshops.dto.CategoryDto;
+import com.simpledev.dreamshops.model.Category;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
-public class AddProductRequest {
+public class ProductDto {
     private String name;
     private String brand;
     private String description;
@@ -14,4 +15,5 @@ public class AddProductRequest {
     private int inventory;
 
     private CategoryDto category;
+    private List<ImageDto> images;
 }

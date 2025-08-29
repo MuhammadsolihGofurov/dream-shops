@@ -1,5 +1,6 @@
 package com.simpledev.dreamshops.service.product;
 
+import com.simpledev.dreamshops.dto.ProductDto;
 import com.simpledev.dreamshops.model.Product;
 import com.simpledev.dreamshops.request.AddProductRequest;
 import com.simpledev.dreamshops.request.UpdateProductRequest;
@@ -24,4 +25,8 @@ public interface IProductService {
     List<Product> getProductsByBrandAndName(String brandName, String name);
 
     Long countProductsByBrandAndName(String brandName, String name);
+
+    ProductDto convertToDto(Product product);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
 }

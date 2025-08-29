@@ -1,5 +1,7 @@
 package com.simpledev.dreamshops.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonManagedReference
     private List<Product> products;
 
     public Category(String name) {

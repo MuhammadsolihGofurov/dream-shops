@@ -1,5 +1,6 @@
 package com.simpledev.dreamshops.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Image {
 
     @Lob
     @Column(name = "image_data")
+    @JsonIgnore
     private Blob blob;
     private String downloadUrl;
 

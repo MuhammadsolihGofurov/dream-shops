@@ -1,17 +1,24 @@
 package com.simpledev.dreamshops.service.product;
 
+import com.simpledev.dreamshops.dto.ImageDto;
+import com.simpledev.dreamshops.dto.ProductDto;
 import com.simpledev.dreamshops.exceptions.ProductNotFoundException;
 import com.simpledev.dreamshops.model.Category;
+import com.simpledev.dreamshops.model.Image;
 import com.simpledev.dreamshops.model.Product;
 import com.simpledev.dreamshops.repository.CategoryRepository;
+import com.simpledev.dreamshops.repository.ImageRespository;
 import com.simpledev.dreamshops.repository.ProductRepository;
 import com.simpledev.dreamshops.request.AddProductRequest;
 import com.simpledev.dreamshops.request.UpdateProductRequest;
+import com.simpledev.dreamshops.service.image.ImageService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
@@ -21,6 +28,12 @@ public class ProductService implements IProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ImageRespository imageRespository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -33,7 +46,7 @@ public class ProductService implements IProductService {
 
                     return categoryRepository.save(newCategory);
                 });
-        request.setCategory(category);
+//        request.setCategory(category.getName());
 
         return productRepository.save(createProduct(request, category));
     }
@@ -78,15 +91,25 @@ public class ProductService implements IProductService {
         existingProduct.setPrice(request.getPrice());
         existingProduct.setInventory(request.getInventory());
 
-        Category category = categoryRepository.findByName(request.getCategory().getName());
-
-        existingProduct.setCategory(category);
+//        Category category = categoryRepository.findByName(request.getCategory().getName());
+//
+//        existingProduct.setCategory(category);
 
         return existingProduct;
     }
 
     @Override
     public List<Product> getAllProducts() {
+//        return products.stream()
+//        .map(p -> new ProductResponseDto(
+//                p.getId(),
+//                p.getName(),
+//                p.getBrand(),
+//                p.getDescription(),
+//                p.getPrice(),
+//                p.getInventory(),
+//                p.getCategory().getName()
+//        )).toList();
         return productRepository.findAll();
     }
 
@@ -118,5 +141,24 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductsByBrandAndName(String brandName, String name) {
         return productRepository.countByBrandAndName(brandName, name);
+    }
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRespository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 }

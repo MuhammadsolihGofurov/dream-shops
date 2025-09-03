@@ -1,5 +1,6 @@
 package com.simpledev.dreamshops.controller;
 
+import com.simpledev.dreamshops.dto.CartDto;
 import com.simpledev.dreamshops.exceptions.ResourceNotFoundException;
 import com.simpledev.dreamshops.model.Cart;
 import com.simpledev.dreamshops.response.ApiResponse;
@@ -24,6 +25,7 @@ public class CartController {
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
+
             return ResponseEntity.ok(new ApiResponse("Success", cart));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

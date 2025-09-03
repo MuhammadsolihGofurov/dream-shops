@@ -2,6 +2,7 @@ package com.simpledev.dreamshops.service.cart;
 
 import com.simpledev.dreamshops.exceptions.ResourceNotFoundException;
 import com.simpledev.dreamshops.model.Cart;
+import com.simpledev.dreamshops.model.User;
 import com.simpledev.dreamshops.repository.CartItemRepository;
 import com.simpledev.dreamshops.repository.CartRepository;
 import jakarta.transaction.Transactional;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Optional;
 
 @Service
 public class CartService implements ICartService {
@@ -48,9 +49,18 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        Cart cart = new Cart();
-        return cartRepository.save(cart).getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
+    }
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
     }
 
 }

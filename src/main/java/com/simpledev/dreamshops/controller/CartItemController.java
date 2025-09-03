@@ -1,11 +1,15 @@
 package com.simpledev.dreamshops.controller;
 
 
+import com.simpledev.dreamshops.dto.UserDto;
 import com.simpledev.dreamshops.exceptions.ResourceNotFoundException;
+import com.simpledev.dreamshops.model.Cart;
 import com.simpledev.dreamshops.model.CartItem;
+import com.simpledev.dreamshops.model.User;
 import com.simpledev.dreamshops.response.ApiResponse;
 import com.simpledev.dreamshops.service.cart.ICartItemService;
 import com.simpledev.dreamshops.service.cart.ICartService;
+import com.simpledev.dreamshops.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +28,18 @@ public class CartItemController {
     @Autowired
     private ICartService cartService;
 
+    @Autowired
+    private IUserService userService;
+
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId, @RequestParam Long productId, @RequestParam int quantity) {
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long productId, @RequestParam int quantity) {
         try {
+            User user = userService.getUserById(1L);
+            Cart cart = cartService.initializeNewCart(user);
 
-            if(cartId == null) {
-                cartId = cartService.initializeNewCart();
-            }
 
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add Item success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

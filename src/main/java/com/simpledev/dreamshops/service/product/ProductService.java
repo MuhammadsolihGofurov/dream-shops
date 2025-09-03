@@ -2,6 +2,7 @@ package com.simpledev.dreamshops.service.product;
 
 import com.simpledev.dreamshops.dto.ImageDto;
 import com.simpledev.dreamshops.dto.ProductDto;
+import com.simpledev.dreamshops.exceptions.AlreadyExistsException;
 import com.simpledev.dreamshops.exceptions.ProductNotFoundException;
 import com.simpledev.dreamshops.model.Category;
 import com.simpledev.dreamshops.model.Image;
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +42,11 @@ public class ProductService implements IProductService {
         //  check if the category is found
         //  if yes, set it as the new product category
         //  if no, save it as a new category, then set it as a new product category
+
+        if (productExists(request.getName(), request.getBrand())) {
+            throw new AlreadyExistsException(request.getBrand() + request.getName() + "Already exists, you may update this product");
+        }
+
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -49,6 +56,10 @@ public class ProductService implements IProductService {
 //        request.setCategory(category.getName());
 
         return productRepository.save(createProduct(request, category));
+    }
+
+    private boolean productExists(String productName, String productBrand) {
+        return productRepository.existsByNameAndBrand(productName, productBrand);
     }
 
     private Product createProduct(AddProductRequest product, Category category) {

@@ -1,6 +1,7 @@
 package com.simpledev.dreamshops.controller;
 
 import com.simpledev.dreamshops.dto.ProductDto;
+import com.simpledev.dreamshops.exceptions.AlreadyExistsException;
 import com.simpledev.dreamshops.exceptions.ProductNotFoundException;
 import com.simpledev.dreamshops.exceptions.ResourceNotFoundException;
 import com.simpledev.dreamshops.model.Product;
@@ -55,8 +56,8 @@ public class ProductController {
             ProductDto convertedProduct = productService.convertToDto(theProduct);
 
             return ResponseEntity.ok(new ApiResponse("Create", convertedProduct));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

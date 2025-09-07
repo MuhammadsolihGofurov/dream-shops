@@ -79,11 +79,12 @@ The server will start on:
 
 | Method | Endpoint                | Description                  |
 | ------ | ----------------------- | ---------------------------- |
-| POST   | `/api/v1/auth/register` | Register a new user          |
 | POST   | `/api/v1/auth/login`    | Authenticate and get JWT     |
-| GET    | `/api/v1/products`      | Get all products             |
-| POST   | `/api/v1/products`      | Add new product (Admin only) |
-| GET    | `/api/v1/orders`        | Get user orders              |
+| GET    | `/api/v1/products/all`      | Get all products             |
+| POST   | `/api/v1/products/add`      | Add new product (Admin only) |
+
+📌 Note: Full API collection is available in the project folder:
+/resources/Dream Shops v1.postman_collection.json
 
 ---
 

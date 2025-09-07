@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest request) {
         try {
@@ -61,6 +63,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody UpdateProductRequest request, @RequestParam Long id) {
         try {
@@ -72,6 +75,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@RequestParam Long id) {
         try {

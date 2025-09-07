@@ -9,6 +9,9 @@ import com.simpledev.dreamshops.request.CreateUserRequest;
 import com.simpledev.dreamshops.request.UserUpdateRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,6 +25,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(Long userId) {
@@ -39,7 +45,7 @@ public class UserService implements IUserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // ⚠️ bu yerda password encode qilinishi kerak!
+        user.setPassword(passwordEncoder.encode((request.getPassword()))); // ⚠️ bu yerda password encode qilinishi kerak!
         return convertToDto(userRepository.save(user));
     }
 
@@ -86,5 +92,22 @@ public class UserService implements IUserService {
         }
 
         return userDto;
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User is not authenticated");
+        }
+
+        String email = authentication.getName();
+        if (email == null || email.equals("anonymousUser")) {
+            throw new RuntimeException("Invalid authentication - anonymous user");
+        }
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 }

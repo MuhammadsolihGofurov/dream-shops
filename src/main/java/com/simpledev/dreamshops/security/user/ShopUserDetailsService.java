@@ -19,7 +19,8 @@ public class ShopUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Optional<User> optional = Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = optional.get();
         return ShopUserDetails.buildUserDetails(user);
     }
 }

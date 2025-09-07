@@ -10,6 +10,7 @@ import com.simpledev.dreamshops.response.ApiResponse;
 import com.simpledev.dreamshops.service.cart.ICartItemService;
 import com.simpledev.dreamshops.service.cart.ICartService;
 import com.simpledev.dreamshops.service.user.IUserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class CartItemController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long productId, @RequestParam int quantity) {
         try {
-            User user = userService.getUserById(1L);
+            User user = userService.getAuthenticatedUser();
             Cart cart = cartService.initializeNewCart(user);
 
 
@@ -43,6 +44,8 @@ public class CartItemController {
             return ResponseEntity.ok(new ApiResponse("Add Item success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch(JwtException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

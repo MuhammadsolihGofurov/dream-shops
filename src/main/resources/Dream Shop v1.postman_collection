@@ -1,0 +1,799 @@
+{
+	"info": {
+		"_postman_id": "9f687751-0102-4319-a268-1dce8a4ac399",
+		"name": "Dream Shop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "45092271",
+		"_collection_link": "https://my-projects-004.postman.co/workspace/Team-Workspace~8560c2fa-4ce4-490e-8162-83693efff495/collection/45092271-9f687751-0102-4319-a268-1dce8a4ac399?action=share&source=collection_link&creator=45092271"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/products/all",
+						"description": "### Get All Products\n\nThis endpoint retrieves a list of all products available in the system.\n\n**Request Method:** `GET`\n\n**Endpoint:** `{{local_server}}/api/v1/products/all`\n\n#### Expected Response\n\n- **Status Code:** `200 OK`\n    \n- **Content-Type:** `application/json`\n    \n- **Response Body:**\n    \n    - `message`: A string that may contain additional information about the request (currently empty).\n        \n    - `data`: An array that contains the list of products. In the current response, it is empty, indicating no products are available.\n        \n\n#### Notes\n\n- This endpoint does not require any request parameters.\n    \n- The response will always include a `message` field and a `data` field, where `data` will contain the product details if available.\n    \n- Ensure to handle cases where the `data` array is empty, as this indicates that there are no products in the system."
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{user_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Iphone 12 pro max\",\r\n    \"brand\": \"Apple\",\r\n    \"price\": \"400\",\r\n    \"inventory\": 1,\r\n    \"description\": \"Iphone smart phone\",\r\n    \"category\": {\r\n        \"name\": \"Apple\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{local_server}}/api/v1/products/add",
+						"description": "## Add Product API\n\nThis endpoint allows users to add a new product to the inventory. It accepts product details in the request body and returns a confirmation response with the product's unique identifier and other relevant information.\n\n### Request\n\n- **Method**: POST\n    \n- **URL**: `{{local_server}}/api/v1/products/add`\n    \n- **Headers**:\n    \n    - `Content-Type: application/json`\n        \n\n#### Request Body\n\nThe request body must be in JSON format and include the following parameters:\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `name` | string | The name of the product. |\n| `brand` | string | The brand of the product. |\n| `price` | number | The price of the product. |\n| `inventory` | number | The available inventory count. |\n| `description` | string | A brief description of the product. |\n| `category` | string | The category of the product (e.g., Electronics). |\n\n##### Example Request Body\n\n``` json\n{\n  \"name\": \"TV\",\n  \"brand\": \"Apple\",\n  \"price\": 400,\n  \"inventory\": 20,\n  \"description\": \"Apple smart electronics\",\n  \"category\": \"Electronics\"\n}\n\n ```\n\n### Response\n\nOn a successful request, the API will return a response with a status code of `200` and the following structure:\n\n- **Status**: 200\n    \n- **Content-Type**: application/json\n    \n- {\"message\": \"\",\"data\": { \"id\": 0, \"name\": \"\", \"brand\": \"\", \"description\": \"\", \"price\": 0, \"inventory\": 0, \"category\": { \"id\": 0, \"name\": \"\", \"products\": null }, \"images\": null}}\n    \n\n#### Response Fields\n\n| Field | Type | Description |\n| --- | --- | --- |\n| `message` | string | A message indicating the result of the request. |\n| `data` | object | Contains details of the added product. |\n| `id` | number | The unique identifier for the newly added product. |\n| `name` | string | The name of the added product. |\n| `brand` | string | The brand of the added product. |\n| `description` | string | The description of the added product. |\n| `price` | number | The price of the added product. |\n| `inventory` | number | The inventory count of the added product. |\n| `category` | object | Details about the category of the product. |\n| `images` | array | Any associated images for the product (if applicable). |\n\nThis endpoint is essential for managing product listings in your inventory system."
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Iphone 11 pro\",\r\n    \"brand\": \"Apple\",\r\n    \"price\": 900,\r\n    \"inventory\": 20,\r\n    \"description\": \"Apple smart electronics\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/update?id=3",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "## Update Product\n\nThis endpoint allows you to update the details of a specific product in the inventory. You can modify attributes such as the product's name, brand, price, inventory count, description, and category.\n\n### Request\n\n- **Method**: PUT\n    \n- **Endpoint**: `{{local_server}}/api/v1/products/update`\n    \n- **Query Parameters**:\n    \n    - `id` (required): The unique identifier of the product you wish to update.\n        \n\n### Request Body\n\nThe request body should be in JSON format and include the following fields:\n\n- `name` (string): The name of the product.\n    \n- `brand` (string): The brand of the product.\n    \n- `price` (number): The price of the product.\n    \n- `inventory` (number): The number of items available in stock.\n    \n- `description` (string): A brief description of the product.\n    \n- `category` (object): An object containing category details.\n    \n    - `id` (number): The unique identifier of the category.\n        \n    - `name` (string): The name of the category.\n        \n\n**Example Request Body**:\n\n``` json\n{\n  \"name\": \"TV updates\",\n  \"brand\": \"Apple\",\n  \"price\": 400,\n  \"inventory\": 20,\n  \"description\": \"Apple smart electronics\",\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Electronics\"\n  }\n}\n\n ```\n\n### Response\n\nOn a successful update, the response will return a status code of `200` along with a JSON object containing:\n\n- `message`: A string indicating the status of the operation (usually empty on success).\n    \n- `data`: An object representing the updated product details, which includes:\n    \n    - `id`: The unique identifier of the product.\n        \n    - `name`: The updated name of the product.\n        \n    - `brand`: The updated brand of the product.\n        \n    - `description`: The updated description of the product.\n        \n    - `price`: The updated price of the product.\n        \n    - `inventory`: The updated inventory count.\n        \n    - `category`: An object containing the updated category details.\n        \n\n**Example Response**:\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": {\n    \"id\": 0,\n    \"name\": \"\",\n    \"brand\": \"\",\n    \"description\": \"\",\n    \"price\": 0,\n    \"inventory\": 0,\n    \"category\": {\n      \"id\": 0,\n      \"name\": \"\",\n      \"products\": []\n    }\n  }\n}\n\n ```\n\n### Notes\n\n- Ensure that the `id` parameter in the query string corresponds to an existing product in the database.\n    \n- The response format will include updated values reflecting the changes made to the product."
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/delete?id=1",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/products/by-id/3",
+						"description": "### Get Product by ID\n\nThis endpoint retrieves detailed information about a specific product using its unique identifier (ID). It is useful for applications that require product details for display or further processing.\n\n#### Request\n\n- **Method**: GET\n    \n- **URL**: `{{local_server}}/api/v1/products/by-id/{id}`\n    \n- **Path Parameter**:\n    \n    - `id` (required): The unique identifier of the product you wish to retrieve. In this example, the ID is `3`.\n        \n\n#### Response\n\nUpon a successful request, the API returns a JSON object with the following structure:\n\n- **Status Code**: 200\n    \n- **Content-Type**: application/json\n    \n- **Response Body**:\n    \n    - `message`: A string that may contain additional information about the request (currently empty).\n        \n    - `data`: An object containing the product details:\n        \n        - `id`: The unique identifier of the product.\n            \n        - `name`: The name of the product.\n            \n        - `brand`: The brand associated with the product.\n            \n        - `description`: A brief description of the product.\n            \n        - `price`: The price of the product.\n            \n        - `inventory`: The available inventory count for the product.\n            \n        - `category`: An object representing the product's category:\n            \n            - `id`: The unique identifier of the category.\n                \n            - `name`: The name of the category.\n                \n        - `images`: An array that may contain URLs or paths to images of the product.\n            \n\nThis endpoint is essential for fetching product details based on a specific ID, allowing clients to display or utilize the product information effectively."
+					},
+					"response": []
+				},
+				{
+					"name": "by-name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-name/?name=Watch",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-name",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Watch"
+								}
+							]
+						},
+						"description": "### Get Product by Name\n\nThis endpoint retrieves product details based on the specified product name.\n\n#### Request\n\n- **Method**: GET\n    \n- **URL**: `{{local_server}}/api/v1/products/by-name/`\n    \n- **Query Parameters**:\n    \n    - `name` (string, required): The name of the product to search for. In this example, the value is `Watch`.\n        \n\n#### Response\n\n- **Status Code**: 200 OK\n    \n- **Content-Type**: application/json\n    \n\nThe response body contains a JSON object with the following structure:\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": 0,\n      \"name\": \"\",\n      \"brand\": \"\",\n      \"description\": \"\",\n      \"price\": 0,\n      \"inventory\": 0,\n      \"category\": {\n        \"id\": 0,\n        \"name\": \"\"\n      },\n      \"images\": []\n    }\n  ]\n}\n\n ```\n\n- **Fields**:\n    \n    - `message`: A string that may contain additional information about the request.\n        \n    - `data`: An array of product objects that match the search criteria. Each product object includes:\n        \n        - `id`: The unique identifier for the product.\n            \n        - `name`: The name of the product.\n            \n        - `brand`: The brand of the product.\n            \n        - `description`: A brief description of the product.\n            \n        - `price`: The price of the product.\n            \n        - `inventory`: The available stock for the product.\n            \n        - `category`: An object containing:\n            \n            - `id`: The unique identifier for the category.\n                \n            - `name`: The name of the category.\n                \n        - `images`: An array of image URLs related to the product.\n            \n\n#### Notes\n\n- Ensure that the `name` parameter is correctly specified to retrieve the desired product.\n    \n- If no products match the search criteria, the `data` array may be empty."
+					},
+					"response": []
+				},
+				{
+					"name": "by-brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-brand?brand=Apple",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-brand"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Apple"
+								}
+							]
+						},
+						"description": "## Get Products by Brand\n\nThis endpoint retrieves a list of products filtered by a specific brand.\n\n### Request\n\n- **Method**: `GET`\n    \n- **Endpoint**: `{{local_server}}/api/v1/products/by-brand`\n    \n- **Query Parameters**:\n    \n    - `brand` (string, required): The name of the brand for which products are to be fetched. In this example, the brand is set to `Apple`.\n        \n\n### Response\n\n- **Status Code**: `200 OK`\n    \n- **Content-Type**: `application/json`\n    \n- { \"message\": \"\", \"data\": \\[ { \"id\": 0, \"name\": \"\", \"brand\": \"\", \"description\": \"\", \"price\": 0, \"inventory\": 0, \"category\": { \"id\": 0, \"name\": \"\" }, \"images\": \\[\\] } \\]}\n    \n- **Response Fields**:\n    \n    - `message`: A string that may contain additional information about the response.\n        \n    - `data`: An array of product objects, each containing:\n        \n        - `id`: The unique identifier for the product.\n            \n        - `name`: The name of the product.\n            \n        - `brand`: The brand of the product.\n            \n        - `description`: A brief description of the product.\n            \n        - `price`: The price of the product.\n            \n        - `inventory`: The available stock of the product.\n            \n        - `category`: An object containing:\n            \n            - `id`: The unique identifier for the category.\n                \n            - `name`: The name of the category.\n                \n        - `images`: An array of image URLs related to the product.\n            \n\nThis endpoint is useful for clients wanting to fetch products associated with a specific brand, allowing for easy integration into applications that require brand-specific product listings."
+					},
+					"response": []
+				},
+				{
+					"name": "by-category-name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-category-name?categoryName=Gadgets",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-category-name"
+							],
+							"query": [
+								{
+									"key": "categoryName",
+									"value": "Gadgets"
+								}
+							]
+						},
+						"description": "### Get Products by Category Name\n\nThis endpoint retrieves a list of products that belong to a specified category. It allows users to filter products based on the category name provided in the query parameters.\n\n#### Request\n\n- **Method**: GET\n    \n- **URL**: `{{local_server}}/api/v1/products/by-category-name`\n    \n- **Query Parameters**:\n    \n    - `categoryName` (string, required): The name of the category for which products are being requested. This parameter is used to filter the products returned in the response.\n        \n\n#### Response\n\n- **Status Code**: 200 OK\n    \n- **Content-Type**: application/json\n    \n- **Response Body**:\n    \n    - `message`: A string that may contain additional information about the request (currently empty).\n        \n    - `data`: An array of product objects, each containing the following fields:\n        \n        - `id` (integer): The unique identifier for the product.\n            \n        - `name` (string): The name of the product.\n            \n        - `brand` (string): The brand associated with the product.\n            \n        - `description` (string): A brief description of the product.\n            \n        - `price` (integer): The price of the product.\n            \n        - `inventory` (integer): The available inventory count for the product.\n            \n        - `category`: An object representing the category of the product, containing:\n            \n            - `id` (integer): The unique identifier for the category.\n                \n            - `name` (string): The name of the category.\n                \n        - `images` (array): A list of image URLs associated with the product.\n            \n\nThis endpoint is useful for clients looking to display products filtered by specific categories, enhancing the shopping experience by allowing users to browse relevant items."
+					},
+					"response": []
+				},
+				{
+					"name": "by-category-name-and-brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-category-name-and-brand?categoryName=Gadgets&brand=Apple",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-category-name-and-brand"
+							],
+							"query": [
+								{
+									"key": "categoryName",
+									"value": "Gadgets"
+								},
+								{
+									"key": "brand",
+									"value": "Apple"
+								}
+							]
+						},
+						"description": "### Get Products by Category Name and Brand\n\nThis endpoint retrieves a list of products filtered by a specified category name and brand. It allows users to query the product catalog based on their preferences, making it easier to find specific items within a category.\n\n#### Request\n\n- **Method**: GET\n    \n- **URL**: `{{local_server}}/api/v1/products/by-category-name-and-brand`\n    \n\n**Query Parameters**:\n\n- `categoryName` (string): The name of the category to filter products by (e.g., \"Gadgets\").\n    \n- `brand` (string): The brand of the products to filter (e.g., \"Apple\").\n    \n\n#### Response\n\n- **Status Code**: 200 OK\n    \n- **Content-Type**: application/json\n    \n\n**Response Structure**:\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": 0,\n      \"name\": \"\",\n      \"brand\": \"\",\n      \"description\": \"\",\n      \"price\": 0,\n      \"inventory\": 0,\n      \"category\": {\n        \"id\": 0,\n        \"name\": \"\"\n      },\n      \"images\": []\n    }\n  ]\n}\n\n ```\n\n**Response Fields**:\n\n- `message`: A string that may contain additional information about the request status.\n    \n- `data`: An array of product objects, each containing:\n    \n    - `id`: The unique identifier for the product.\n        \n    - `name`: The name of the product.\n        \n    - `brand`: The brand of the product.\n        \n    - `description`: A brief description of the product.\n        \n    - `price`: The price of the product.\n        \n    - `inventory`: The available stock for the product.\n        \n    - `category`: An object representing the category of the product, containing:\n        \n        - `id`: The unique identifier for the category.\n            \n        - `name`: The name of the category.\n            \n    - `images`: An array of image URLs associated with the product.\n        \n\nThis endpoint is useful for clients looking to display or process products based on specific criteria, enhancing the shopping experience."
+					},
+					"response": []
+				},
+				{
+					"name": "by-brand-and-name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-brand-and-name?brand=Apple&name=TV",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-brand-and-name"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Apple"
+								},
+								{
+									"key": "name",
+									"value": "TV"
+								}
+							]
+						},
+						"description": "### API Endpoint: Get Products by Brand and Name\n\n#### Description\n\nThis endpoint retrieves a list of products filtered by a specified brand and name. It allows users to search for products that match the given criteria, making it easier to find specific items within the product catalog.\n\n#### Request\n\n- **Method:** GET\n    \n- **URL:** `{{local_server}}/api/v1/products/by-brand-and-name`\n    \n- **Query Parameters:**\n    \n    - `brand` (string): The brand of the product to filter by (e.g., \"Apple\").\n        \n    - `name` (string): The name of the product to filter by (e.g., \"TV\").\n        \n\n#### Expected Request Format\n\nNo request body is required for this GET request. The parameters are passed in the query string of the URL.\n\n#### Response\n\n- **Status Code:** 200 OK\n    \n- **Content-Type:** application/json\n    \n- { \"message\": \"\", \"data\": \\[ { \"id\": 0, \"name\": \"\", \"brand\": \"\", \"description\": \"\", \"price\": 0, \"inventory\": 0, \"category\": { \"id\": 0, \"name\": \"\" }, \"images\": \\[\\] } \\]}\n    \n\n#### Response Fields:\n\n- `message` (string): A message related to the request (can be empty).\n    \n- `data` (array): An array of product objects that match the query.\n    \n    - Each product object contains:\n        \n        - `id` (integer): Unique identifier for the product.\n            \n        - `name` (string): Name of the product.\n            \n        - `brand` (string): Brand of the product.\n            \n        - `description` (string): Description of the product.\n            \n        - `price` (number): Price of the product.\n            \n        - `inventory` (integer): Available inventory count.\n            \n        - `category` (object): Object containing category details.\n            \n            - `id` (integer): Unique identifier for the category.\n                \n            - `name` (string): Name of the category.\n                \n        - `images` (array): Array of image URLs related to the product.\n            \n\n#### Headers\n\nNo specific headers are required for this request, but standard headers such as `Accept: application/json` can be included to specify the desired response format."
+					},
+					"response": []
+				},
+				{
+					"name": "by-brand-and-name-count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/products/by-brand-and-name/count?brand=Apple&name=TV",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"by-brand-and-name",
+								"count"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Apple"
+								},
+								{
+									"key": "name",
+									"value": "TV"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/Victus/Desktop/logo__png1.png"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/Victus/Desktop/photo_2024-07-23_18-31-15.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{local_server}}/api/v1/images/upload?productId=3",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"images",
+								"upload"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "3"
+								}
+							]
+						},
+						"description": "## Upload Image for Product\n\nThis endpoint allows you to upload images associated with a specific product. By providing the `productId` as a query parameter, you can upload one or more image files that will be linked to that product.\n\n### Request\n\n- **Method**: POST\n    \n- **URL**: `{{local_server}}/api/v1/images/upload?productId=3`\n    \n- **Request Body**: Form-data\n    \n    - **files**: (type: file) The image file(s) to be uploaded. You can select multiple files for upload.\n        \n\n### Response\n\n- **Status Code**: 200\n    \n- **Content-Type**: application/json\n    \n- **Response Body**:\n    \n    - **message**: A message indicating the status of the upload (can be empty).\n        \n    - **data**: An array of objects containing details about the uploaded images:\n        \n        - **imageId**: The unique identifier for the uploaded image.\n            \n        - **imageName**: The name of the uploaded image file.\n            \n        - **downloadUrl**: The URL to download the uploaded image.\n            \n\n### Notes\n\n- Ensure that the `productId` is valid and corresponds to an existing product in the system.\n    \n- The response will provide information about the uploaded images, including their identifiers and download URLs, which can be used for future reference."
+					},
+					"response": []
+				},
+				{
+					"name": "download-image",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/Victus/Desktop/logo__png1.png"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/Victus/Desktop/photo_2024-07-23_18-31-15.jpg"
+								}
+							]
+						},
+						"url": "{{local_server}}/api/v1/images/image/download/1",
+						"description": "## Download Image\n\nThis endpoint allows you to download an image file from the server.\n\n### Request\n\n- **Method**: `GET`\n    \n- **Endpoint**: `{{local_server}}/api/v1/images/image/download/1`\n    \n\n### Request Parameters\n\n- **files** (type: file): This parameter is used to specify the image file to be downloaded.\n    \n\n### Response\n\n- **Status Code**: `200 OK`\n    \n- **Content-Type**: `image/png`\n    \n- **Response Body**: The response contains the image file in PNG format.\n    \n\n### Notes\n\nEnsure that the correct image ID is provided in the endpoint to successfully retrieve the desired image."
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/Victus/Desktop/logo__png1.png"
+								}
+							]
+						},
+						"url": "{{local_server}}/api/v1/images/image/1/update",
+						"description": "### Update Image\n\nThis endpoint allows you to update an existing image by providing a new file. The specified image is identified by its unique ID in the URL.\n\n#### Request\n\n- **Method:** PUT\n    \n- **URL:** `{{local_server}}/api/v1/images/image/1/update`\n    \n- **Request Body Type:** `form-data`\n    \n\n#### Request Body Parameters\n\n- **files** (type: `file`): The new image file that you want to upload. This parameter is required for the request to be processed.\n    \n\n#### Response\n\nUpon a successful update, the response will typically include details about the updated image, such as its ID, URL, and any other relevant metadata. The structure of the response will depend on the implementation but is expected to confirm the successful update of the image.\n\nMake sure to handle any errors that may arise, such as invalid file types or issues with the provided image ID."
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{local_server}}/api/v1/images/image/3/delete"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/categories/all"
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Category name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{local_server}}/api/v1/categories/add"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Name update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_server}}/api/v1/categories/update?categoryId=1",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"update"
+							],
+							"query": [
+								{
+									"key": "categoryId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{local_server}}/api/v1/categories/delete/3"
+					},
+					"response": []
+				},
+				{
+					"name": "by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/categories/by-name?categoryName=name",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"by-name"
+							],
+							"query": [
+								{
+									"key": "categoryName",
+									"value": "name"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart Items",
+			"item": [
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/cart-items/add?productId=1&quantity=10",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart-items",
+								"add"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "1"
+								},
+								{
+									"key": "quantity",
+									"value": "10"
+								}
+							]
+						},
+						"description": "## Add Cart Item\n\nThis endpoint allows users to add items to a shopping cart. By providing the necessary parameters, you can specify which product to add and the quantity desired.\n\n### Request\n\n**Method:** POST  \n**Endpoint:** `{{local_server}}/api/v1/cart-items/add`\n\n#### Query Parameters\n\n- `productId` (required): The unique identifier for the product that you want to add to the cart.\n    \n- `quantity` (required): The number of units of the product to be added to the cart.\n    \n\n### Expected Response\n\nUpon successful execution, the server will return a response with the following format:\n\n- **Status Code:** 200 OK\n    \n- **Content-Type:** application/json\n    \n- **Response Body:**\n    \n    - `message`: A string indicating the status of the operation (may be empty).\n        \n    - `data`: The data returned from the operation (may be null).\n        \n\n### Example Request\n\n``` http\nPOST {{local_server}}/api/v1/cart-items/add?cartId=123&productId=3&quantity=3\n\n ```\n\n### Example Response\n\n``` json\n{\n    \"message\": \"\",\n    \"data\": null\n}\n\n ```\n\nThis endpoint is essential for managing the contents of a user's shopping cart effectively."
+					},
+					"response": []
+				},
+				{
+					"name": "clear cart items",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/cart-items/remove?cartId=1&productId=2",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart-items",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "cartId",
+									"value": "1"
+								},
+								{
+									"key": "productId",
+									"value": "2"
+								}
+							]
+						},
+						"description": "## DELETE /api/v1/cart-items/remove\n\nThis endpoint is used to remove an item from a user's shopping cart. By specifying the `cartId` and `productId`, the user can delete a specific product from the designated cart.\n\n### Request Parameters\n\n- **cartId** (query parameter, required): The unique identifier of the shopping cart from which the item will be removed.\n    \n- **productId** (query parameter, required): The unique identifier of the product that is to be removed from the cart.\n    \n\n### Response Structure\n\nUpon a successful deletion, the API will return a JSON response with the following structure:\n\n- **message**: A string that may contain a message regarding the operation (can be empty).\n    \n- **data**: This field will be `null`, indicating that there is no additional data returned with the response.\n    \n\n### Example Response\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": null\n}\n\n ```\n\nA successful response will have a status code of `200`, indicating that the item was successfully removed from the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "update cart items",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/cart-items/update?cartId=3&productId=3&quantity=10",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart-items",
+								"update"
+							],
+							"query": [
+								{
+									"key": "cartId",
+									"value": "3"
+								},
+								{
+									"key": "productId",
+									"value": "3"
+								},
+								{
+									"key": "quantity",
+									"value": "10"
+								}
+							]
+						},
+						"description": "### Update Cart Item\n\nThis endpoint allows you to update the quantity of a specific product in a user's shopping cart.\n\n#### Request Parameters\n\n- **cartId** (query parameter, required): The unique identifier for the shopping cart that you want to update.\n    \n- **productId** (query parameter, required): The unique identifier for the product whose quantity is to be updated.\n    \n- **quantity** (query parameter, required): The new quantity for the specified product in the cart.\n    \n\n#### Expected Response\n\n- **Status Code**: `200 OK` indicates that the update was successful.\n    \n- **Content-Type**: `application/json`\n    \n- **Response Body**:\n    \n    - **message**: A string that may contain any additional information regarding the update process (may be empty).\n        \n    - **data**: This will generally contain the updated cart information or relevant data. In this case, it is `null`, indicating that no additional data is returned.\n        \n\n#### Notes\n\n- Ensure that the `cartId`, `productId`, and `quantity` parameters are correctly specified in the request to avoid errors.\n    \n- A successful response does not return any data in the `data` field, but a successful status indicates that the operation was completed."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "get current cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/cart/1"
+					},
+					"response": []
+				},
+				{
+					"name": "clear cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{local_server}}/api/v1/cart/clear/2",
+						"description": "### Clear Cart Endpoint\n\nThis endpoint allows users to clear the contents of a specific cart identified by its unique ID.\n\n#### Request\n\n- **Method**: DELETE\n    \n- **URL**: `{{local_server}}/api/v1/cart/clear/{cart_id}`\n    \n\n#### Path Parameters\n\n- `cart_id` (required): The unique identifier of the cart that you wish to clear. In this example, the cart ID is `2`.\n    \n\n#### Expected Response\n\nUpon successful deletion of the cart contents, the API will return a response indicating the status of the operation. The response typically includes:\n\n- A success message confirming that the cart has been cleared.\n    \n- An appropriate HTTP status code (e.g., 200 OK for a successful operation).\n    \n\n#### Notes\n\n- Ensure that the cart ID provided in the request corresponds to an existing cart; otherwise, the operation may fail.\n    \n- This action is irreversible; once the cart is cleared, all items will be permanently removed."
+					},
+					"response": []
+				},
+				{
+					"name": "total price",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/cart/total-price/4",
+						"description": "## Get Total Price of Cart\n\nThis endpoint retrieves the total price of the cart for a specified user.\n\n### Request\n\n- **Method**: GET\n    \n- **URL**: `{{local_server}}/api/v1/cart/total-price/{userId}`\n    \n\n#### Path Parameters\n\n- `userId` (integer): The unique identifier for the user whose cart total price is being requested.\n    \n\n### Response\n\n- **Status Code**: 200 OK\n    \n- **Content-Type**: application/json\n    \n\n#### Response Body\n\n``` json\n{\n    \"message\": \"\",\n    \"data\": 0\n}\n\n ```\n\n- `message` (string): A message related to the request. This may be empty.\n    \n- `data` (integer): The total price of the user's cart. A value of `0` indicates that the cart is empty or there are no items priced.\n    \n\n### Notes\n\n- Ensure that the `userId` is valid and corresponds to an existing user in the system.\n    \n- The response will always include a `data` field, which will reflect the total price of the cart. If the cart is empty, the value will be `0`."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/users/user/5",
+						"description": "### API Endpoint: Retrieve User Information\n\n**Method:** GET  \n**URL:** `{{local_server}}/api/v1/users/user/{userId}`\n\n#### Purpose\n\nThis endpoint is used to retrieve detailed information about a specific user based on their unique identifier (userId). It provides essential user details including their name, email, associated orders, and cart information.\n\n#### Request Format\n\nThis is a simple GET request and does not require a request body. The userId should be specified in the URL path.\n\n**Example URL:**  \n`{{local_server}}/api/v1/users/user/1`\n\n#### Expected Headers\n\n- **Authorization:** Bearer token (if authentication is required)\n    \n- **Content-Type:** application/json\n    \n\n#### Response Structure\n\nOn a successful request, the server returns a JSON response with the following structure:\n\n- **Status Code:** 200\n    \n- **Content-Type:** application/json\n    \n- {\"message\": \"\",\"data\": { \"id\": 0, \"firstName\": \"\", \"lastName\": \"\", \"email\": \"\", \"orders\": null, \"cart\": { \"cartId\": 0, \"totalAmount\": 0, \"items\": \\[ { \"itemId\": 0, \"quantity\": 0, \"unitPrice\": 0, \"productDto\": null } \\] }}}\n    \n\n#### Response Fields\n\n- **message:** A string that may contain additional information about the request (can be empty).\n    \n- **data:** An object containing user details:\n    \n    - **id:** Unique identifier for the user.\n        \n    - **firstName:** User's first name.\n        \n    - **lastName:** User's last name.\n        \n    - **email:** User's email address.\n        \n    - **orders:** An array or null indicating the user's orders (if any).\n        \n    - **cart:** An object representing the user's shopping cart:\n        \n        - **cartId:** Unique identifier for the cart.\n            \n        - **totalAmount:** Total monetary value of the items in the cart.\n            \n        - **items:** An array of items in the cart, where each item includes:\n            \n            - **itemId:** Unique identifier for the item.\n                \n            - **quantity:** Number of units of the item.\n                \n            - **unitPrice:** Price per unit of the item.\n                \n            - **productDto:** Additional product details (if available).\n                \n\nUse this endpoint to effectively retrieve user-specific data for further processing or display in your application."
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Muhammadsolih\",\r\n    \"lastName\": \"Gofurov\",\r\n    \"email\": \"gofurovmuhammadsolih@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{local_server}}/api/v1/users/user/create",
+						"description": "## Create User\n\nThis endpoint allows you to create a new user in the system. By sending a POST request to `/api/v1/users/user/create`, you can register a user with their personal details.\n\n### Request\n\nThe request body must be in JSON format and include the following parameters:\n\n- **firstName** (string): The first name of the user.\n    \n- **lastName** (string): The last name of the user.\n    \n- **email** (string): The email address of the user. This should be unique.\n    \n- **password** (string): The password for the user account.\n    \n\n#### Example Request Body\n\n``` json\n{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securepassword\"\n}\n\n ```\n\n### Response\n\nUpon a successful request, the server will respond with a status code of 200 and a JSON object containing the following structure:\n\n- **message** (string): A message indicating the success of the operation (may be empty).\n    \n- **data** (object): An object containing the details of the created user:\n    \n    - **id** (integer): The unique identifier for the newly created user.\n        \n    - **firstName** (string): The first name of the user.\n        \n    - **lastName** (string): The last name of the user.\n        \n    - **email** (string): The email address of the user.\n        \n    - **orders** (array|null): A list of orders associated with the user, if any (null if none).\n        \n    - **cart** (array|null): The user's shopping cart contents, if any (null if none).\n        \n\n#### Example Response\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": {\n    \"id\": 1,\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"orders\": null,\n    \"cart\": null\n  }\n}\n\n ```\n\n### Notes\n\n- Ensure that the email provided is unique to avoid conflicts during user creation.\n    \n- The password should meet any security requirements set by the system."
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Muhammadsolih\",\r\n    \"lastName\": \"Gofurovs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{local_server}}/api/v1/users/user/update/6",
+						"description": "## Update User Information\n\nThis endpoint allows you to update the information of a specific user identified by their unique ID. The request is sent via an HTTP PUT method to the specified URL, which includes the user ID in the path.\n\n### Request Parameters\n\nThe request body should be in JSON format and must include the following parameters:\n\n- **firstName** (string): The new first name of the user.\n    \n- **lastName** (string): The new last name of the user.\n    \n\n#### Example Request Body\n\n``` json\n{\n  \"firstName\": \"NewFirstName\",\n  \"lastName\": \"NewLastName\"\n}\n\n ```\n\n### Response\n\nUpon a successful update, the API will return a response with the following structure:\n\n- **Status**: 200 OK\n    \n- **Content-Type**: application/json\n    \n- **Response Body**:\n    \n    - **message** (string): A message indicating the result of the update operation (may be empty).\n        \n    - **data** (object): An object containing the updated user information:\n        \n        - **id** (integer): The unique identifier of the user.\n            \n        - **firstName** (string): The updated first name of the user.\n            \n        - **lastName** (string): The updated last name of the user.\n            \n        - **email** (string): The email address of the user (if applicable).\n            \n        - **orders** (array|null): A list of orders associated with the user (if applicable).\n            \n        - **cart** (object|null): The current shopping cart of the user (if applicable).\n            \n\n### Notes\n\n- Ensure that the user ID in the URL corresponds to an existing user in the system.\n    \n- This operation may not return the updated values immediately; check the user details via a separate GET request if needed."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"user3@gmail.com\",\r\n    \"password\": \"secret\"\r\n}"
+						},
+						"url": "{{local_server}}/api/v1/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{local_server}}/api/v1/user/delete/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/orders/create?userId=1",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"create"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_server}}/api/v1/orders/order/1"
+					},
+					"response": []
+				},
+				{
+					"name": "my-orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_server}}/api/v1/orders/my-orders?userId=1",
+							"host": [
+								"{{local_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"my-orders"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
